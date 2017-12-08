@@ -41,14 +41,14 @@ template <class T>
 class BinaryTree {
 public:
 	BinaryTree();
-	BinaryTree(Node<T> root);
+	BinaryTree(Node<T>* root);
 
 	void addNode(Node<T>& parent, Node<T>& child, CHILD_AS lor);//lor: left or right
 	int size();
-	int depth(Node<T>& node);
+	int depth(Node<T>* node);
 	int height();
 	//void InOrderTraversal();
-	//void PreOrderTraversal();
+	void PreOrderTraversal();
 	//void PostOrderTraversal();
 	//void SeqentialOrderTraversal();
 	void printTree(Node<T>* root);
@@ -56,6 +56,7 @@ private:
 	Node<T>* root;
 	int nodesCount;
 	void buildTree(Node<T>* root);
+	int calculateHeight(Node<T>* root);
 };
 
 template <class T>
@@ -89,28 +90,43 @@ void BinaryTree<T>::buildTree(Node<T>* root) {
 		nodesCount++;
 	}
 	else {
-		root->lchild = nullptr;
+		root->rchild = nullptr;
 	}
 
 	if (ch1 == '#' && ch2 == '#') {
 		return;
 	}
-	cout << "现在,该节点的左孩子为: " << root->lchild->data << ",右孩子为: " << root->rchild->data << endl << endl;
+	cout << "现在,该节点的左孩子为: " << root->lchild << ",右孩子为: " << root->rchild << endl << endl;
 	buildTree(root->lchild);
 	buildTree(root->rchild);
 }
 
 template <class T>
-BinaryTree<T>::BinaryTree(Node<T> root) {
-	this->root = &root;
+BinaryTree<T>::BinaryTree(Node<T>* root) {
+	this->root = root;
 	cout << "构造树(当左/右节点均为 '#'字符或数字35 时结束构造): \n";
-	buildTree(this->root);
+	buildTree(root);
 	cout << "构造结束!\n";
 }
 
 template <class T>
-int BinaryTree<T>::depth(Node<T>& node) {
-	return 0;
+int BinaryTree<T>::depth(Node<T>* node) {
+}
+
+template <class T>
+int BinaryTree<T>::calculateHeight(Node<T>* root) {
+	Node<T>* node = root;
+	if (node == nullptr) {
+		return 0;
+	}
+	int leftMaxDepth = 1 + calculateHeight(node->lchild);
+	int rightMaxDepth = 1 + calculateHeight(node->rchild);
+
+	return (leftMaxDepth > rightMaxDepth ? leftMaxDepth : rightMaxDepth);
+}
+template <class T>
+int BinaryTree<T>::height() {
+	return calculateHeight(root);
 }
 
 template <class T>
