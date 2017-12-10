@@ -2,14 +2,34 @@
 #include <sstream>
 #include <iostream>
 #include <string>
-
+using namespace std;
 /*
    定义:
 	树的大小:节点数量
 	树的高度:所有节点中的最大深度
 	树中某个节点的深度:该节点到根节点路径上的链接数
 */
-using namespace std;
+
+namespace treePrint {
+	void printSpace(int times = 0) {
+		for (int i = 0; i < times; i++) {
+			cout << ' ';
+		}
+	}
+	void printTreeCrotch(int interval) {
+		cout << "/";
+		printSpace(interval);
+		cout << "\\";
+	}
+	inline void newLine() {
+		cout << endl;
+	}
+	template <class T>
+	inline void printElem(T elem) {
+		cout << elem;
+	}
+}
+
 template <class T>
 class Node {
 public:
