@@ -35,9 +35,10 @@ public:
 	int size();
 	int depth(Node<T>* node);
 	int height();
-	//void InOrderTraversal();
-	//void PreOrderTraversal();
-	//void PostOrderTraversal();
+	Node<T>* getRoot();
+	void InOrderTraversal();
+	void PreOrderTraversal();
+	void PostOrderTraversal();
 	vector<Node<T>*> SeqentialOrderTraversal();
 private:
 	Node<T>* root;
@@ -121,11 +122,6 @@ BinaryTree<T>::BinaryTree(Node<T>* root, BUILD_MODEL model) {
 }
 
 template <class T>
-BinaryTree<T>::~BinaryTree() {
-	destroy();
-}
-
-template <class T>
 void BinaryTree<T>::destroy() {
 	vector<Node<T>*> nodes = SeqentialOrderTraversal();
 	for (auto node : nodes) {
@@ -136,8 +132,8 @@ void BinaryTree<T>::destroy() {
 }
 
 template <class T>
-int BinaryTree<T>::depth(Node<T>* node) {
-	return (calculateHeight(root) - calculateHeight(node));
+BinaryTree<T>::~BinaryTree() {
+	destroy();
 }
 
 template <class T>
@@ -153,6 +149,11 @@ int BinaryTree<T>::calculateHeight(Node<T>* root) {
 template <class T>
 int BinaryTree<T>::height() {
 	return calculateHeight(root);
+}
+
+template <class T>
+int BinaryTree<T>::depth(Node<T>* node) {
+	return (calculateHeight(root) - calculateHeight(node));
 }
 
 template <class T>
@@ -182,6 +183,41 @@ void BinaryTree<T>::addNode(Node<T>* parent, Node<T>* child, CHILD_AS lor) {
 template <class T>
 int BinaryTree<T>::size() {
 	return nodesCount;
+}
+
+template <class T>
+Node<T>* BinaryTree<T>::getRoot() {
+	return root;
+}
+
+template <class T>
+void BinaryTree<T>::InOrderTraversal() {
+	if (root == nullptr) {
+		return;
+	}
+	InOrderTraversal(root->lchild);
+	cout << root->data;
+	InOrderTraversal(root->rchild);
+}
+
+template <class T>
+void BinaryTree<T>::PreOrderTraversal() {
+	if (root == nullptr) {
+		return;
+	}
+	cout << root->data;
+	PreOrderTraversal(root->lchild);
+	PreOrderTraversal(root->rchild);
+}
+
+template <class T>
+void BinaryTree<T>::PostOrderTraversal() {
+	if (root == nullptr) {
+		return;
+	}
+	PostOrderTraversal(root->lchild);
+	PostOrderTraversal(root->rchild);
+	cout << root->data;
 }
 
 template <class T>
