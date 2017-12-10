@@ -3,6 +3,7 @@
 #include "treePrint.h"
 #include "BTNode.h"
 using namespace std;
+
 /*
    定义:
 	树的大小:节点数量
@@ -20,7 +21,9 @@ class BinaryTree {
 public:
 	BinaryTree();
 	BinaryTree(Node<T>* root);
+	~BinaryTree();
 
+	void destroy();
 	void addNode(Node<T>& parent, Node<T>& child, CHILD_AS lor);//lor: left or right
 	int size();
 	int depth(Node<T>* node);
@@ -72,9 +75,10 @@ void BinaryTree<T>::buildTree(Node<T>* root) {
 	}
 
 	if (ch1 == '#' && ch2 == '#') {
+		cout << root->data << "节点为叶子节点!" << endl << endl;
 		return;
 	}
-	cout << "现在,该节点的左孩子为: " << root->lchild << ",右孩子为: " << root->rchild << endl << endl;
+	cout << "现在," << root->data << "节点的左孩子为: " << root->lchild << ",右孩子为: " << root->rchild << endl << endl;
 	buildTree(root->lchild);
 	buildTree(root->rchild);
 }
@@ -82,9 +86,18 @@ void BinaryTree<T>::buildTree(Node<T>* root) {
 template <class T>
 BinaryTree<T>::BinaryTree(Node<T>* root) {
 	this->root = root;
-	cout << "构造树(当左/右节点均为 '#'字符或数字35 时结束构造): \n";
+	cout << "构造树(当左右节点均为 '#'字符或数字35 时结束构造): \n";
 	buildTree(root);
 	cout << "构造结束!\n";
+}
+
+template <class T>
+BinaryTree<T>::~BinaryTree() {
+	destroy();
+}
+
+template <class T>
+void BinaryTree<T>::destroy() {
 }
 
 template <class T>
@@ -146,9 +159,15 @@ void BinaryTree<T>::SeqentialOrderTraversal() {
 	Node<T>* curRoot = root;
 	queue<Node<T>* > nodesQueue;
 	nodesQueue.push(curRoot);
-	if (!nodesQueue.empty()) {
-		curRoot = nodesQueue.pop();
+	while (!nodesQueue.empty()) {
+		curRoot = nodesQueue.front();
+		nodesQueue.pop();
 		cout << curRoot->data;
-		printChilds(curRoot);
+		if (curRoot->lchild) {
+			nodesQueue.push(curRoot->lchild);
+		}
+		if (curRoot->rchild) {
+			nodesQueue.push(curRoot->rchild);
+		}
 	}
 }
