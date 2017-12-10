@@ -39,7 +39,6 @@ public:
 	//void PreOrderTraversal();
 	//void PostOrderTraversal();
 	vector<Node<T>*> SeqentialOrderTraversal();
-	void printTree(Node<T>* root);
 private:
 	Node<T>* root;
 	int nodesCount;
@@ -93,6 +92,7 @@ void BinaryTree<T>::buildTree(Node<T>* root) {
 template <class T>
 BinaryTree<T>::BinaryTree(Node<T>* root, BUILD_MODEL model) {
 	this->root = root;
+	nodesCount = 1;	//根节点
 	if (model == BUILD_MODEL::BY_FILE_DATA) {
 		cout << "通过 dataIn.txt 文件构造二叉树,输出信息在 logOut.txt 文件中 ...\n";
 		streambuf* default_in = cin.rdbuf();
@@ -145,8 +145,8 @@ int BinaryTree<T>::calculateHeight(Node<T>* root) {
 	if (root == nullptr) {
 		return 0;
 	}
-	int leftMaxDepth = 1 + calculateHeight(node->lchild);
-	int rightMaxDepth = 1 + calculateHeight(node->rchild);
+	int leftMaxDepth = 1 + calculateHeight(root->lchild);
+	int rightMaxDepth = 1 + calculateHeight(root->rchild);
 	return (leftMaxDepth > rightMaxDepth ? leftMaxDepth : rightMaxDepth);
 }
 
@@ -169,7 +169,7 @@ void BinaryTree<T>::addNode(Node<T>* parent, Node<T>* child, CHILD_AS lor) {
 	}
 	else if (lor == CHILD_AS::R_CHILD) {
 		if (parent->rchild == nullptr) {
-			paren->rchild = child;
+			parent->rchild = child;
 			nodesCount++;
 		}
 		else {
@@ -182,13 +182,6 @@ void BinaryTree<T>::addNode(Node<T>* parent, Node<T>* child, CHILD_AS lor) {
 template <class T>
 int BinaryTree<T>::size() {
 	return nodesCount;
-}
-
-template <class T>
-void BinaryTree<T>::printTree(Node<T>* root) {
-	if (root->rchild == nullptr && root->rchild = nullptr) {
-		return;
-	}
 }
 
 template <class T>
