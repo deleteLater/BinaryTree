@@ -1,5 +1,7 @@
 #pragma once
 #include <queue>
+#include <iostream>
+#include <fstream>
 #include "treePrint.h"
 #include "BTNode.h"
 using namespace std;
@@ -29,7 +31,7 @@ public:
 	~BinaryTree();
 
 	void destroy();
-	void addNode(Node<T>& parent, Node<T>& child, CHILD_AS lor);//lor: left or right
+	void addNode(Node<T>*parent, Node<T>* child, CHILD_AS lor);//lor: left or right
 	int size();
 	int depth(Node<T>* node);
 	int height();
@@ -68,7 +70,7 @@ void BinaryTree<T>::buildTree(Node<T>* root) {
 	else {
 		root->lchild = nullptr;
 	}
-
+	cout << ch1;
 	cout << "输入右孩子: ";
 	cin >> ch2;
 	if (ch2 != (T)'#') {
@@ -78,7 +80,7 @@ void BinaryTree<T>::buildTree(Node<T>* root) {
 	else {
 		root->rchild = nullptr;
 	}
-
+	cout << ch2 << endl;
 	if (ch1 == '#' && ch2 == '#') {
 		cout << root->data << "节点为叶子节点!" << endl << endl;
 		return;
@@ -92,10 +94,30 @@ template <class T>
 BinaryTree<T>::BinaryTree(Node<T>* root, BUILD_MODEL model) {
 	this->root = root;
 	if (model == BUILD_MODEL::BY_FILE_DATA) {
+		cout << "通过 dataIn.txt 文件构造二叉树,输出信息在 logOut.txt 文件中 ...\n";
+		streambuf* default_in = cin.rdbuf();
+		streambuf* default_out = cout.rdbuf();
+		ifstream fin;
+		ofstream fout;
+		fout.open("logOut.txt");
+		fin.open("dataIn.txt");
+		//redirect
+		cin.rdbuf(fin.rdbuf());
+		cout.rdbuf(fout.rdbuf());
+		//build tree
+		buildTree(root);
+		//Restore Default
+		fout.close();
+		fin.close();
+		cin.rdbuf(default_in);
+		cout.rdbuf(default_out);
+		cout << "构造完成!";
 	}
-	cout << "构造树(当左右节点均为 '#'字符或数字35 时结束构造): \n";
-	buildTree(root);
-	cout << "构造结束!\n";
+	else {
+		cout << "通过输入构造树(当左右节点均为 '#'字符或数字35 时结束构造): \n";
+		buildTree(root);
+		cout << "构造完成!\n";
+	}
 }
 
 template <class T>
@@ -129,23 +151,25 @@ int BinaryTree<T>::height() {
 }
 
 template <class T>
-void BinaryTree<T>::addNode(Node<T>& parent, Node<T>& child, CHILD_AS lor) {
+void BinaryTree<T>::addNode(Node<T>* parent, Node<T>* child, CHILD_AS lor) {
 	if (lor == CHILD_AS::L_CHILD) {
-		if (parent.lchild == nullptr) {
-			parent.lchild = &child;
+		if (parent->lchild == nullptr) {
+			parent->lchild = child;
 			nodesCount++;
 		}
 		else {
 			cout << "添加节点失败!因为所选父节点已经有相应的子节点!";
+			return;
 		}
 	}
 	else if (lor == CHILD_AS::R_CHILD) {
-		if (parent.rchild == nullptr) {
-			parent.rchild = &child;
+		if (parent->rchild == nullptr) {
+			paren->rchild = child;
 			nodesCount++;
 		}
 		else {
 			cout << "添加节点失败!因为所选父节点已经有相应的子节点!";
+			return;
 		}
 	}
 }
