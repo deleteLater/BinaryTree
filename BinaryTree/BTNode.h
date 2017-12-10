@@ -1,4 +1,7 @@
 #pragma once
+#include <string>
+#include <sstream>
+
 template <class T>
 class Node {
 public:
@@ -13,8 +16,8 @@ public:
 		lchild = nullptr;
 		rchild = nullptr;
 	}
-	string nodeInfo() {
-		ostringstream oss;
+	std::string nodeInfo() {
+		std::ostringstream oss;
 		oss << "NodeInfo: [ address: " << this << " || data: " << this->data <<
 			" || L_CHILD: " << this->lchild << " || R_CHILD: " << this->rchild << "]";
 		return oss.str();

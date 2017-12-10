@@ -1,13 +1,8 @@
 #pragma once
-#include <sstream>
-#include <iostream>
-#include <string>
 #include <queue>
-
 #include "treePrint.h"
 #include "BTNode.h"
 using namespace std;
-using namespace treePrint;
 /*
    定义:
 	树的大小:节点数量
