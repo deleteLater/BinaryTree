@@ -16,11 +16,16 @@ enum class CHILD_AS {
 	R_CHILD
 };
 
+enum class BUILD_MODEL {
+	BY_INPUT,
+	BY_FILE_DATA
+};
+
 template <class T>
 class BinaryTree {
 public:
 	BinaryTree();
-	BinaryTree(Node<T>* root);
+	BinaryTree(Node<T>* root, BUILD_MODEL model);
 	~BinaryTree();
 
 	void destroy();
@@ -31,7 +36,7 @@ public:
 	//void InOrderTraversal();
 	//void PreOrderTraversal();
 	//void PostOrderTraversal();
-	void SeqentialOrderTraversal();
+	vector<T> SeqentialOrderTraversal();
 	void printTree(Node<T>* root);
 private:
 	Node<T>* root;
@@ -84,8 +89,10 @@ void BinaryTree<T>::buildTree(Node<T>* root) {
 }
 
 template <class T>
-BinaryTree<T>::BinaryTree(Node<T>* root) {
+BinaryTree<T>::BinaryTree(Node<T>* root, BUILD_MODEL model) {
 	this->root = root;
+	if (model == BUILD_MODEL::BY_FILE_DATA) {
+	}
 	cout << "构造树(当左右节点均为 '#'字符或数字35 时结束构造): \n";
 	buildTree(root);
 	cout << "构造结束!\n";
@@ -115,6 +122,7 @@ int BinaryTree<T>::calculateHeight(Node<T>* root) {
 
 	return (leftMaxDepth > rightMaxDepth ? leftMaxDepth : rightMaxDepth);
 }
+
 template <class T>
 int BinaryTree<T>::height() {
 	return calculateHeight(root);
@@ -155,14 +163,15 @@ void BinaryTree<T>::printTree(Node<T>* root) {
 }
 
 template <class T>
-void BinaryTree<T>::SeqentialOrderTraversal() {
+vector<T> BinaryTree<T>::SeqentialOrderTraversal() {
 	Node<T>* curRoot = root;
 	queue<Node<T>* > nodesQueue;
+	vector<T> ret;
 	nodesQueue.push(curRoot);
 	while (!nodesQueue.empty()) {
 		curRoot = nodesQueue.front();
 		nodesQueue.pop();
-		cout << curRoot->data;
+		ret.push_back(curRoot->data);
 		if (curRoot->lchild) {
 			nodesQueue.push(curRoot->lchild);
 		}
@@ -170,4 +179,5 @@ void BinaryTree<T>::SeqentialOrderTraversal() {
 			nodesQueue.push(curRoot->rchild);
 		}
 	}
+	return ret;
 }
