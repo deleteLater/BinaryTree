@@ -127,6 +127,12 @@ BinaryTree<T>::~BinaryTree() {
 
 template <class T>
 void BinaryTree<T>::destroy() {
+	vector<Node<T>*> nodes = SeqentialOrderTraversal();
+	for (auto node : nodes) {
+		delete node;
+		node = nullptr;
+	}
+	nodes.clear();
 }
 
 template <class T>
@@ -136,13 +142,11 @@ int BinaryTree<T>::depth(Node<T>* node) {
 
 template <class T>
 int BinaryTree<T>::calculateHeight(Node<T>* root) {
-	Node<T>* node = root;
-	if (node == nullptr) {
+	if (root == nullptr) {
 		return 0;
 	}
 	int leftMaxDepth = 1 + calculateHeight(node->lchild);
 	int rightMaxDepth = 1 + calculateHeight(node->rchild);
-
 	return (leftMaxDepth > rightMaxDepth ? leftMaxDepth : rightMaxDepth);
 }
 
