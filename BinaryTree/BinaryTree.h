@@ -2,55 +2,18 @@
 #include <sstream>
 #include <iostream>
 #include <string>
+#include <queue>
+
+#include "treePrint.h"
+#include "BTNode.h"
 using namespace std;
+using namespace treePrint;
 /*
    定义:
 	树的大小:节点数量
 	树的高度:所有节点中的最大深度
 	树中某个节点的深度:该节点到根节点路径上的链接数
 */
-
-namespace treePrint {
-	void printSpace(int times = 0) {
-		for (int i = 0; i < times; i++) {
-			cout << ' ';
-		}
-	}
-	void printTreeCrotch(int interval) {
-		cout << "/";
-		printSpace(interval);
-		cout << "\\";
-	}
-	inline void newLine() {
-		cout << endl;
-	}
-	template <class T>
-	inline void printElem(T elem) {
-		cout << elem;
-	}
-}
-
-template <class T>
-class Node {
-public:
-	T data;
-	Node* lchild;
-	Node* rchild;
-	Node() {
-		//do nothing
-	}
-	Node(T data) {
-		this->data = data;
-		lchild = nullptr;
-		rchild = nullptr;
-	}
-	string nodeInfo() {
-		ostringstream oss;
-		oss << "NodeInfo: [ address: " << this << " || data: " << this->data <<
-			" || L_CHILD: " << this->lchild << " || R_CHILD: " << this->rchild << "]";
-		return oss.str();
-	}
-};
 
 enum class CHILD_AS {
 	L_CHILD,
@@ -68,9 +31,9 @@ public:
 	int depth(Node<T>* node);
 	int height();
 	//void InOrderTraversal();
-	void PreOrderTraversal();
+	//void PreOrderTraversal();
 	//void PostOrderTraversal();
-	//void SeqentialOrderTraversal();
+	void SeqentialOrderTraversal();
 	void printTree(Node<T>* root);
 private:
 	Node<T>* root;
@@ -180,5 +143,17 @@ template <class T>
 void BinaryTree<T>::printTree(Node<T>* root) {
 	if (root->rchild == nullptr && root->rchild = nullptr) {
 		return;
+	}
+}
+
+template <class T>
+void BinaryTree<T>::SeqentialOrderTraversal() {
+	Node<T>* curRoot = root;
+	queue<Node<T>* > nodesQueue;
+	nodesQueue.push(curRoot);
+	if (!nodesQueue.empty()) {
+		curRoot = nodesQueue.pop();
+		cout << curRoot->data;
+		printChilds(curRoot);
 	}
 }

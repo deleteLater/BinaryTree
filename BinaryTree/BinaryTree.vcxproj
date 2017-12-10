@@ -148,8 +148,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BinaryTree.h" />
+    <ClInclude Include="BTNode.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="treePrint.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
