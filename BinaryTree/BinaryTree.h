@@ -38,7 +38,7 @@ public:
 	//void InOrderTraversal();
 	//void PreOrderTraversal();
 	//void PostOrderTraversal();
-	vector<T> SeqentialOrderTraversal();
+	vector<Node<T>*> SeqentialOrderTraversal();
 	void printTree(Node<T>* root);
 private:
 	Node<T>* root;
@@ -131,6 +131,7 @@ void BinaryTree<T>::destroy() {
 
 template <class T>
 int BinaryTree<T>::depth(Node<T>* node) {
+	return (calculateHeight(root) - calculateHeight(node));
 }
 
 template <class T>
@@ -187,15 +188,15 @@ void BinaryTree<T>::printTree(Node<T>* root) {
 }
 
 template <class T>
-vector<T> BinaryTree<T>::SeqentialOrderTraversal() {
+vector<Node<T>*> BinaryTree<T>::SeqentialOrderTraversal() {
 	Node<T>* curRoot = root;
 	queue<Node<T>* > nodesQueue;
-	vector<T> ret;
+	vector<Node<T>*> ret;
 	nodesQueue.push(curRoot);
 	while (!nodesQueue.empty()) {
 		curRoot = nodesQueue.front();
 		nodesQueue.pop();
-		ret.push_back(curRoot->data);
+		ret.push_back(curRoot);
 		if (curRoot->lchild) {
 			nodesQueue.push(curRoot->lchild);
 		}
