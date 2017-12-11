@@ -24,9 +24,6 @@
     <ClInclude Include="BinaryTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="treePrint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BTNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>

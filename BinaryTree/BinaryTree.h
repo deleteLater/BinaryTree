@@ -3,7 +3,6 @@
 #include <stack>
 #include <iostream>
 #include <fstream>
-#include "treePrint.h"
 #include "BTNode.h"
 using namespace std;
 
@@ -135,12 +134,18 @@ void BinaryTree<T>::destroy() {
 		if (root->rchild) {
 			nodes.push(root->rchild);
 		}
+		cout << "delete: " << root->data << endl;
 		delete root;
 	}
+	root = nullptr;
+	nodesCount = 0;
 }
 
 template <class T>
 BinaryTree<T>::~BinaryTree() {
+	if (root == nullptr) {
+		return;
+	}
 	destroy();
 }
 
@@ -200,36 +205,61 @@ Node<T>* BinaryTree<T>::getRoot() {
 
 template <class T>
 void BinaryTree<T>::InOrderTraversal() {
+	/*RecursiveVersion
+
 	if (root == nullptr) {
 		return;
 	}
 	InOrderTraversal(root->lchild);
 	cout << root->data;
 	InOrderTraversal(root->rchild);
+	*/
+	Node<T>* curNode = root;
+	stack<Node<T>*> nodes;
+	while (!nodes.empty() || curNode) {
+		if (curNode) {
+			nodes.push(curNode);
+			curNode = curNode->lchild;
+		}
+		else {
+			cout << nodes.top()->data;
+			curNode = curNode->rchild;
+			nodes.pop();
+		}
+	}
 }
 
 template <class T>
 void BinaryTree<T>::PreOrderTraversal() {
+	/*RecursiveVersion
+
 	if (root == nullptr) {
 		return;
 	}
 	cout << root->data;
 	PreOrderTraversal(root->lchild);
 	PreOrderTraversal(root->rchild);
+	*/
 }
 
 template <class T>
 void BinaryTree<T>::PostOrderTraversal() {
+	/*RecursiveVersion
 	if (root == nullptr) {
 		return;
 	}
 	PostOrderTraversal(root->lchild);
 	PostOrderTraversal(root->rchild);
 	cout << root->data;
+	*/
 }
 
 template <class T>
 void BinaryTree<T>::SeqentialOrderTraversal() {
+	if (root == nullptr) {
+		cout << "EmptyTree!";
+		return;
+	}
 	Node<T>* curRoot = root;
 	queue<Node<T>* > nodesQueue;
 	nodesQueue.push(curRoot);

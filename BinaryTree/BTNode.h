@@ -22,4 +22,7 @@ public:
 			" || L_CHILD: " << this->lchild << " || R_CHILD: " << this->rchild << "]";
 		return oss.str();
 	}
+	bool isLeaf() {
+		return (lchild == nullptr && rchild == nullptr);
+	}
 };
