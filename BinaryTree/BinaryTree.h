@@ -1,5 +1,6 @@
 #pragma once
 #include <queue>
+#include <stack>
 #include <iostream>
 #include <fstream>
 #include "treePrint.h"
@@ -39,7 +40,7 @@ public:
 	void InOrderTraversal();
 	void PreOrderTraversal();
 	void PostOrderTraversal();
-	vector<Node<T>*> SeqentialOrderTraversal();
+	void SeqentialOrderTraversal();
 private:
 	Node<T>* root;
 	int nodesCount;
@@ -123,12 +124,19 @@ BinaryTree<T>::BinaryTree(Node<T>* root, BUILD_MODEL model) {
 
 template <class T>
 void BinaryTree<T>::destroy() {
-	vector<Node<T>*> nodes = SeqentialOrderTraversal();
-	for (auto node : nodes) {
-		delete node;
-		node = nullptr;
+	stack<Node<T>*> nodes;
+	nodes.push(root);
+	while (!nodes.empty()) {
+		root = nodes.top();
+		nodes.pop();
+		if (root->lchild) {
+			nodes.push(root->lchild);
+		}
+		if (root->rchild) {
+			nodes.push(root->rchild);
+		}
+		delete root;
 	}
-	nodes.clear();
 }
 
 template <class T>
@@ -221,15 +229,14 @@ void BinaryTree<T>::PostOrderTraversal() {
 }
 
 template <class T>
-vector<Node<T>*> BinaryTree<T>::SeqentialOrderTraversal() {
+void BinaryTree<T>::SeqentialOrderTraversal() {
 	Node<T>* curRoot = root;
 	queue<Node<T>* > nodesQueue;
-	vector<Node<T>*> ret;
 	nodesQueue.push(curRoot);
 	while (!nodesQueue.empty()) {
 		curRoot = nodesQueue.front();
 		nodesQueue.pop();
-		ret.push_back(curRoot);
+		cout << curRoot->data;
 		if (curRoot->lchild) {
 			nodesQueue.push(curRoot->lchild);
 		}
@@ -237,5 +244,4 @@ vector<Node<T>*> BinaryTree<T>::SeqentialOrderTraversal() {
 			nodesQueue.push(curRoot->rchild);
 		}
 	}
-	return ret;
 }
