@@ -217,15 +217,13 @@ void BinaryTree<T>::InOrderTraversal() {
 	Node<T>* curNode = root;
 	stack<Node<T>*> nodes;
 	while (!nodes.empty() || curNode) {
-		if (curNode) {
+		while (curNode) {
 			nodes.push(curNode);
 			curNode = curNode->lchild;
 		}
-		else {
-			cout << nodes.top()->data;
-			curNode = curNode->rchild;
-			nodes.pop();
-		}
+		cout << nodes.top()->data;
+		curNode = nodes.top()->rchild;//递归的自我实现
+		nodes.pop();
 	}
 }
 
@@ -240,6 +238,20 @@ void BinaryTree<T>::PreOrderTraversal() {
 	PreOrderTraversal(root->lchild);
 	PreOrderTraversal(root->rchild);
 	*/
+
+	Node<T>* curNode = root;
+	stack<Node<T>*> nodes;
+	while (!nodes.empty() || curNode) {
+		while (curNode) {
+			cout << curNode->data;
+			nodes.push(curNode);
+			curNode = curNode->lchild;
+		}
+		if (!nodes.empty()) {
+			curNode = nodes.top()->rchild;
+			nodes.pop();
+		}
+	}
 }
 
 template <class T>
