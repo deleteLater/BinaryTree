@@ -44,7 +44,7 @@ private:
 	Node<T>* root;
 	int nodesCount;
 	void buildTree(Node<T>* root);
-	int calculateHeight(Node<T>* root);
+	int calculateDepth(Node<T>* root);
 };
 
 template <class T>
@@ -150,7 +150,7 @@ BinaryTree<T>::~BinaryTree() {
 }
 
 template <class T>
-int BinaryTree<T>::calculateHeight(Node<T>* root) {
+int BinaryTree<T>::calculateDepth(Node<T>* root) {
 	if (root == nullptr) {
 		return 0;
 	}
@@ -161,12 +161,12 @@ int BinaryTree<T>::calculateHeight(Node<T>* root) {
 
 template <class T>
 int BinaryTree<T>::height() {
-	return calculateHeight(root);
+	return calculateDepth(root);
 }
 
 template <class T>
 int BinaryTree<T>::depth(Node<T>* node) {
-	return (calculateHeight(root) - calculateHeight(node));
+	return (calculateDepth(root) - calculateDepth(node));
 }
 
 template <class T>
@@ -264,6 +264,24 @@ void BinaryTree<T>::PostOrderTraversal() {
 	PostOrderTraversal(root->rchild);
 	cout << root->data;
 	*/
+
+	//false:代表左子树遍历完成  true:代表右子树遍历完成
+	stack<pair<Node<T>*, bool>> nodes;
+	Node<T>* curNodes = root;
+	while (!nodes.empty() || curNodes) {
+		while (curNodes) {
+			nodes.push(make_pair(curNodes, false));
+			curNodes = curNodes->lchild;
+		}
+		while (!nodes.empty() && nodes.top().second == true) {
+			cout << nodes.top().first->data;
+			nodes.pop();
+		}
+		if (!nodes.empty()) {
+			nodes.top().second = true;
+			curNodes = nodes.top().first->rchild;
+		}
+	}
 }
 
 template <class T>
