@@ -182,7 +182,6 @@ int BinaryTree<T>::calculateDepth(Node<T>* root) {
 	return curDepth;
 }
 
-
 template <class T>
 int BinaryTree<T>::height() {
 	return calculateDepth(root);
