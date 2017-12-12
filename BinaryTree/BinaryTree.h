@@ -154,8 +154,8 @@ int BinaryTree<T>::calculateDepth(Node<T>* root) {
 	if (root == nullptr) {
 		return 0;
 	}
-	int leftMaxDepth = 1 + calculateHeight(root->lchild);
-	int rightMaxDepth = 1 + calculateHeight(root->rchild);
+	int leftMaxDepth = 1 + calculateDepth(root->lchild);
+	int rightMaxDepth = 1 + calculateDepth(root->rchild);
 	return (leftMaxDepth > rightMaxDepth ? leftMaxDepth : rightMaxDepth);
 }
 
