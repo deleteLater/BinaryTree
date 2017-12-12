@@ -151,13 +151,37 @@ BinaryTree<T>::~BinaryTree() {
 
 template <class T>
 int BinaryTree<T>::calculateDepth(Node<T>* root) {
+	/*
 	if (root == nullptr) {
 		return 0;
 	}
 	int leftMaxDepth = 1 + calculateDepth(root->lchild);
 	int rightMaxDepth = 1 + calculateDepth(root->rchild);
 	return (leftMaxDepth > rightMaxDepth ? leftMaxDepth : rightMaxDepth);
+	*/
+	queue<Node<T>*> nodes;
+	Node<T>* curNode = nullptr;
+	nodes.push(root);
+	int curDepth = 0;
+	while (!nodes.empty()) {
+		int visited = 0;
+		int curLevelNodes = nodes.size();
+		while (visited < curLevelNodes) {
+			curNode = nodes.front();
+			nodes.pop();
+			visited++;
+			if (curNode->lchild) {
+				nodes.push(curNode->lchild);
+			}
+			if (curNode->rchild) {
+				nodes.push(curNode->rchild);
+			}
+		}
+		curDepth++;
+	}
+	return curDepth;
 }
+
 
 template <class T>
 int BinaryTree<T>::height() {
@@ -214,15 +238,15 @@ void BinaryTree<T>::InOrderTraversal() {
 	cout << root->data;
 	InOrderTraversal(root->rchild);
 	*/
-	Node<T>* curNode = root;
-	stack<Node<T>*> nodes;
-	while (!nodes.empty() || curNode) {
-		while (curNode) {
-			nodes.push(curNode);
-			curNode = curNode->lchild;
+	Node<T>* curRoot = root;
+	stack<Node<T>*> nodes;	
+	while (!nodes.empty() || curRoot) {
+		while (curRoot) {
+			nodes.push(curRoot);
+			curRoot = curRoot->lchild;//将左孩子作为根
 		}
-		cout << nodes.top()->data;
-		curNode = nodes.top()->rchild;//递归的自我实现
+		cout << nodes.top()->data;	  //栈顶就是当前根的最小(最底层)左/右孩子 
+		curRoot = nodes.top()->rchild;//将右孩子作为根
 		nodes.pop();
 	}
 }
@@ -239,16 +263,16 @@ void BinaryTree<T>::PreOrderTraversal() {
 	PreOrderTraversal(root->rchild);
 	*/
 
-	Node<T>* curNode = root;
+	Node<T>* curRoot = root;
 	stack<Node<T>*> nodes;
-	while (!nodes.empty() || curNode) {
-		while (curNode) {
-			cout << curNode->data;
-			nodes.push(curNode);
-			curNode = curNode->lchild;
+	while (!nodes.empty() || curRoot) {
+		while (curRoot) {
+			cout << curRoot->data;
+			nodes.push(curRoot);
+			curRoot = curRoot->lchild;
 		}
 		if (!nodes.empty()) {
-			curNode = nodes.top()->rchild;
+			curRoot = nodes.top()->rchild;
 			nodes.pop();
 		}
 	}
@@ -265,21 +289,22 @@ void BinaryTree<T>::PostOrderTraversal() {
 	cout << root->data;
 	*/
 
-	//false:代表左子树遍历完成  true:代表右子树遍历完成
+	//对于每个节点都会访问两次
+	//false:第一次访问入栈 true:第二次访问出栈并输出
 	stack<pair<Node<T>*, bool>> nodes;
-	Node<T>* curNodes = root;
-	while (!nodes.empty() || curNodes) {
-		while (curNodes) {
-			nodes.push(make_pair(curNodes, false));
-			curNodes = curNodes->lchild;
+	Node<T>* curRoot = root;
+	while (!nodes.empty() || curRoot) {
+		while (curRoot) {
+			nodes.push(make_pair(curRoot, false));	//第一次访问
+			curRoot = curRoot->lchild;
 		}
 		while (!nodes.empty() && nodes.top().second == true) {
-			cout << nodes.top().first->data;
+			cout << nodes.top().first->data;//第二次访问
 			nodes.pop();
 		}
 		if (!nodes.empty()) {
-			nodes.top().second = true;
-			curNodes = nodes.top().first->rchild;
+			curRoot = nodes.top().first->rchild;
+			nodes.top().second = true;	//下一次就是第二次访问
 		}
 	}
 }
