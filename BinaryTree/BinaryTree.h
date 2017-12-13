@@ -262,6 +262,8 @@ void BinaryTree<T>::PreOrderTraversal() {
 	PreOrderTraversal(root->rchild);
 	*/
 
+	//对于每个节点访问两次
+	//第一次输出并入栈,第二次访问其右孩子后出栈
 	Node<T>* curRoot = root;
 	stack<Node<T>*> nodes;
 	while (!nodes.empty() || curRoot) {
@@ -310,6 +312,8 @@ void BinaryTree<T>::PostOrderTraversal() {
 
 template <class T>
 void BinaryTree<T>::SeqentialOrderTraversal() {
+	//对于每个节点访问且仅访问一次
+	//出队顺序就是层序遍历
 	if (root == nullptr) {
 		cout << "EmptyTree!";
 		return;
@@ -319,7 +323,7 @@ void BinaryTree<T>::SeqentialOrderTraversal() {
 	nodesQueue.push(curRoot);
 	while (!nodesQueue.empty()) {
 		curRoot = nodesQueue.front();
-		nodesQueue.pop();
+		nodesQueue.pop();		
 		cout << curRoot->data;
 		if (curRoot->lchild) {
 			nodesQueue.push(curRoot->lchild);
