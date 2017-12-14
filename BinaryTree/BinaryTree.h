@@ -272,8 +272,10 @@ void BinaryTree<T>::PreOrderTraversal() {
 			nodes.push(curRoot);
 			curRoot = curRoot->lchild;
 		}
-		curRoot = nodes.top()->rchild;
-		nodes.pop();
+		if (!nodes.empty()) {
+			curRoot = nodes.top()->rchild;
+			nodes.pop();
+		}
 	}
 }
 
