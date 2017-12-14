@@ -14,50 +14,115 @@ public:
 template <class T>
 class PreOrderIterator : public Iterator<T> {
 public:
-	PreOrderIterator(nodeStack<T>* root) {
+	PreOrderIterator(Node<T>* root) {
 		if (root)
 			nodeStack.push(root);
 	}
 	virtual Node<T>* next() {
 		Node<T>* ret(nullptr);
 		if (!nodeStack.empty()) {
-			top = nodeStack.top();
+			ret = nodeStack.top();
 			nodeStack.pop();
-			if (top->rchild) {
-				nodeStack.push(top->rchild);
+			if (ret->rchild) {
+				nodeStack.push(ret->rchild);
 			}
-			if (top->lchild) {
-				nodeStack.push(top->lchild);
+			if (ret->lchild) {
+				nodeStack.push(ret->lchild);
 			}
+			return ret;
 		}
-		return ret;
+		return nullptr;
 	}
 private:
-	stack<Node<T>* > nodeStack;
+	stack<Node<T>*> nodeStack;
 };
 
 template <class T>
 class InOrderIterator : public Iterator<T> {
 public:
 	InOrderIterator(Node<T>* root){
-		if (root) {
+		while (root) {
 			nodeStack.push(root);
-			if (root->lchild) {
-				nodeStack.push(root->lchild);
-			}
+			root = root->lchild;
 		}
 	}
 	virtual Node<T>* next() {
 		Node<T>* ret(nullptr);
 		Node<T>* cur(nullptr);
 		if (!nodeStack.empty()) {
-			cur = nodeStack.top();
-			ret = cur;
+			ret = nodeStack.top();
+			nodeStack.pop();
+			cur = ret->rchild;
 			while (cur) {
-				if(cur = cur->lchild)
+				nodeStack.push(cur);
+				cur = cur->lchild;
 			}
 		}
+		return ret;
 	}
 private:
 	stack<Node<T>*> nodeStack;
+};
+
+template <class T>
+class PostOrderIterator : public Iterator<T> {
+public:
+	PostOrderIterator(Node<T>* root): pre(nullptr){
+		while (root) {
+			nodeStack.push(root);
+			root = root->lchild;
+		}
+	}
+	virtual Node<T>* next() {
+		Node<T>* cur(nullptr);
+		while (cur || !nodeStack.empty()) {
+			//push curRoot's lchilds
+			while (cur) {
+				nodeStack.push(cur);
+				cur = cur->lchild;
+			}
+			cur = nodeStack.top();
+			nodeStack.pop();
+			//if curNode->rchild == nullptr || curNode->rchild has been visited , return
+			if (cur->rchild == pre || cur->rchild == nullptr) {
+				pre = cur;
+				return cur;
+			}
+			//else push rchild
+			else
+			{
+				nodeStack.push(cur);
+				cur = cur->rchild;
+			}
+		}
+		return nullptr;
+	}
+private:
+	Node<T>* pre;	//previously visited node
+	stack<Node<T>*> nodeStack;
+};
+
+template <class T>
+class SeqentialOrderIterator : public Iterator<T> {
+public:
+	SeqentialOrderIterator(Node<T>* root) {
+		nodeQueue.push(root);
+	}
+	virtual Node<T>* next() {
+		Node<T>* ret(nullptr);
+		if (!nodeQueue.empty()) {
+			ret = nodeQueue.front();
+			nodeQueue.pop();
+			if (ret->lchild) {
+				nodeQueue.push(ret->lchild);
+			}
+			if (ret->rchild) {
+				nodeQueue.push(ret->rchild);
+			}
+			return ret;
+		}
+		return nullptr;
+	}
+private:
+	queue<Node<T>*> nodeQueue;
 };

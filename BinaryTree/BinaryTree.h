@@ -244,9 +244,11 @@ void BinaryTree<T>::InOrderTraversal() {
 			nodes.push(curRoot);
 			curRoot = curRoot->lchild;//将左孩子作为根
 		}
-		cout << nodes.top()->data;	  //栈顶就是当前根的最小(最底层)左/右孩子 
-		curRoot = nodes.top()->rchild;//将右孩子作为根
-		nodes.pop();
+		if (!nodes.empty()) {
+			cout << nodes.top()->data;	  //栈顶就是当前根的最小(最底层)左/右孩子 
+			curRoot = nodes.top()->rchild;//将右孩子作为根
+			nodes.pop();
+		}
 	}
 }
 
@@ -266,6 +268,7 @@ void BinaryTree<T>::PreOrderTraversal() {
 	//第一次输出并入栈,第二次访问其右孩子后出栈
 	Node<T>* curRoot = root;
 	stack<Node<T>*> nodes;
+	nodes.push(root);
 	while (!nodes.empty() || curRoot) {
 		while (curRoot) {
 			cout << curRoot->data;
