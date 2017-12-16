@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include "BTNode.h"
+#include "BTIterator.h"
 using namespace std;
 
 /*
@@ -36,10 +37,12 @@ public:
 	int depth(Node<T>* node);
 	int height();
 	Node<T>* getRoot();
+	//TODO:Morris Traversal
 	void InOrderTraversal();
 	void PreOrderTraversal();
 	void PostOrderTraversal();
 	void SeqentialOrderTraversal();
+	//TODO:printTree function
 private:
 	Node<T>* root;
 	int nodesCount;
@@ -128,11 +131,11 @@ void BinaryTree<T>::destroy() {
 	while (!nodes.empty()) {
 		root = nodes.top();
 		nodes.pop();
-		if (root->lchild) {
-			nodes.push(root->lchild);
-		}
 		if (root->rchild) {
 			nodes.push(root->rchild);
+		}
+		if (root->lchild) {
+			nodes.push(root->lchild);
 		}
 		cout << "delete: " << root->data << endl;
 		delete root;
@@ -268,7 +271,6 @@ void BinaryTree<T>::PreOrderTraversal() {
 	//第一次输出并入栈,第二次访问其右孩子后出栈
 	Node<T>* curRoot = root;
 	stack<Node<T>*> nodes;
-	nodes.push(root);
 	while (!nodes.empty() || curRoot) {
 		while (curRoot) {
 			cout << curRoot->data;
@@ -293,6 +295,8 @@ void BinaryTree<T>::PostOrderTraversal() {
 	cout << root->data;
 	*/
 
+	/*
+	//stack-non-recursive Version_1
 	//对于每个节点都会访问两次
 	//false:第一次访问入栈 true:第二次访问出栈并输出
 	stack<pair<Node<T>*, bool>> nodes;
@@ -302,13 +306,38 @@ void BinaryTree<T>::PostOrderTraversal() {
 			nodes.push(make_pair(curRoot, false));	//第一次访问
 			curRoot = curRoot->lchild;
 		}
+		curRoot = nodes.top().first;
 		while (!nodes.empty() && nodes.top().second == true) {
-			cout << nodes.top().first->data;//第二次访问
+			cout << curRoot->data;//第二次访问
 			nodes.pop();
 		}
 		if (!nodes.empty()) {
-			curRoot = nodes.top().first->rchild;
+			curRoot = curRoot->rchild;
 			nodes.top().second = true;	//下一次就是第二次访问
+		}
+	}
+	*/
+
+	//stack-non-recursive Version_2
+	stack<Node<T>*> nodes;
+	Node<T>* cur(root);
+	Node<T>* pre(nullptr);
+	while (cur || !nodes.empty()) {
+		while (cur) {
+			nodes.push(cur);
+			cur = cur->lchild;
+		}
+		if (!nodes.empty()) {
+			cur = nodes.top();
+			if (nullptr == cur->rchild || pre == cur->rchild) {
+				nodes.pop();
+				cout << cur->data;
+				pre = cur;
+				cur = nullptr;//please notice
+			}
+			else {
+				cur = cur->rchild;
+			}
 		}
 	}
 }
